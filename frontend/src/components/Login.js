@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Updated hook
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const navigate = useNavigate(); // useNavigate hook replaces useHistory
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setErrorMessage(''); // Clear previous errors
-    setSuccessMessage(''); // Clear previous success message
+    setErrorMessage('');
+    setSuccessMessage('');
 
     try {
       const response = await axios.post('http://localhost:8090/login', {
         username,
-        password
+        password,
       });
 
       if (response.data.token) {
@@ -25,8 +25,7 @@ const Login = () => {
         setSuccessMessage('Login successful!');
         alert("Login successfully");
 
-        // Redirect to the homepage after successful login
-        navigate('/home'); // useNavigate replaces history.push
+        navigate('/');
       }
     } catch (error) {
       if (error.response && error.response.data) {
@@ -38,33 +37,55 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="fixed top-0 z-50 w-full p-4 border-b  bg-white flex justify-start items-center space-x-4 shadow-md">
+        <Link className="bg-blue-500 text-white rounded-md px-4 py-2 shadow-md hover:bg-blue-600 transition-all" to="/">
+          Return to Home
+        </Link>
+      </div>
+      <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-md">
+        <div className="text-center mb-6">
+          <h2 className="text-4xl font-bold">Login</h2>
         </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+
+        <form onSubmit={handleLogin}>
+          <div className="mb-4">
+            <label htmlFor="username" className="block text-gray-700">Username:</label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              className="w-full px-4 py-2 mt-2 border rounded-lg"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-gray-700">Password:</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-4 py-2 mt-2 border rounded-lg"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-all"
+          >
+            Login
+          </button>
+        </form>
+
+        {errorMessage && <p className="mt-4 text-red-500">{errorMessage}</p>}
+        {successMessage && <p className="mt-4 text-green-500">{successMessage}</p>}
+
+        <div className="mt-6 text-center">
+          <Link to="/register" className="text-blue-500 hover:underline">Don't have an account? Sign up</Link>
         </div>
-        <button type="submit">Login</button>
-      </form>
-      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+      </div>
     </div>
   );
 };
