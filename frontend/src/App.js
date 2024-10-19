@@ -12,10 +12,10 @@ function App() {
       <div className="App">
         <h1>Welcome to My WebApp</h1>
         <Routes> {/* Replace Switch with Routes */}
-          <Route path="/register" element={isAuthenticated ? <Navigate to="/home" /> : <Register />} />
-          <Route path="/login" element={isAuthenticated ? <Navigate to="/home" /> : <Login />} />
-          <Route path="/home" element={isAuthenticated ? <Homepage /> : <Navigate to="/login" />} />
-          <Route path="*" element={<Navigate to="/register" />} /> {/* Catch-all route */}
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Homepage />} />
+          {/* <Route path="*" element={<Navigate to="/register" />} /> Catch-all route */}
         </Routes>
       </div>
     </Router>
