@@ -37,7 +37,7 @@ const ChatInterface = ({ Darkmode }) => {
                 formData.append('file', file);
             }
 
-            const response = await fetch('http://localhost:8080/ask-ai', {
+            const response = await fetch('http://localhost:8090/ask-ai', {
                 method: 'POST',
                 body: formData,
             });

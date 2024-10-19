@@ -1,27 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Register() {
-    const userid = localStorage.getItem("userid");
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token"); // Retrieve the token from localStorage
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
-    const [subscription, setSubscription] = useState(false);
-    const [createdAt, setCreatedAt] = useState(null);
 
-    const isLoggedIn = userid !== null && userid !== undefined && userid !== "";
+    const isLoggedIn = token !== null && token !== undefined && token !== "";
 
     async function onSubmit(event) {
         event.preventDefault();
         setIsLoading(true);
         setError(null);
-        const time = new Date();
-        setCreatedAt(time);
 
         try {
-            const response = await fetch('http://localhost:8080/register', {
+            const response = await fetch('http://localhost:8090/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -30,19 +27,24 @@ export default function Register() {
                     username: username,
                     password: password,
                     email: email,
-                    createdAt: time,
-                    subscription: subscription,
                 }),
             });
 
             if (!response.ok) {
-                throw new Error('Failed to submit the data. Please try again.');
+                throw new Error('Failed to register. Please try again.');
             }
 
             const data = await response.json();
-            localStorage.setItem("userid", data.userid);
-            localStorage.setItem("username", data.username);
-            setError(data.message);
+            if (data.token) {
+                // Store the token and user info in localStorage
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("userid", data.userid);
+                localStorage.setItem("username", data.username);
+                alert("Registration successful, welcome " + data.username + "!");
+                navigate("/");
+            } else {
+                setError(data.message);
+            }
         } catch (error) {
             setError(error.message);
             console.error(error);

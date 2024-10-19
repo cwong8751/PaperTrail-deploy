@@ -3,41 +3,42 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
     const navigate = useNavigate();
-    const userid = localStorage.getItem("userid");
+    const token = localStorage.getItem("token"); // Retrieve the token from localStorage
     const [error, setError] = useState(null);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
-    const isLoggedIn = userid !== null && userid !== undefined && userid !== "";
-    console.log(userid)
+    const isLoggedIn = token !== null && token !== undefined && token !== "";
+    console.log(token);
+
     async function onSubmit(event) {
         event.preventDefault();
         setIsLoading(true);
         setError(null);
-        const lastLogin = new Date().toISOString(); // Current timestamp
         try {
-            const response = await fetch('http://localhost:8080/login', {
+            const response = await fetch('http://localhost:8090/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     username: username,
-                    password: password,
-                    lastLogin: lastLogin // Include lastLogin timestamp
+                    password: password
                 }),
             });
 
             if (!response.ok) {
-                throw new Error('Failed to submit the data. Please try again.');
+                throw new Error('Failed to login. Please try again.');
             }
 
             const data = await response.json();
-            if (data.success) {
-                alert("Welcome Back, " + data.username + "!");
+            if (data.token) {
+                // Store the token and user info in localStorage
+                localStorage.setItem("token", data.token);
                 localStorage.setItem("userid", data.userid);
                 localStorage.setItem("username", data.username);
+                alert("Welcome Back, " + data.username + "!");
                 navigate("/");
             } else {
                 setError(data.message);
