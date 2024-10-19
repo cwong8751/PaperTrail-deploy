@@ -105,6 +105,14 @@ const ProductPage = () => {
         }
     };
 
+    // Helper function to convert image file to Base64 string
+    const toBase64 = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+
     // Handle image submit
     const handleImageSubmit = async () => {
         if (!uploadedImage) {
@@ -116,12 +124,47 @@ const ProductPage = () => {
         formData.append('file', uploadedImage);
 
         try {
-            const response = await axios.post('http://localhost:8090/upload', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+            // Convert uploaded image to base64 string
+            const base64Image = await toBase64(uploadedImage);
+    
+            // Prepare API request data with image
+            const apiKey = "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";
+            const url = "https://api.openai.com/v1/chat/completions";
+    
+            const imgData = {
+                model: 'gpt-4o-mini',
+                messages: [
+                    {
+                        role: 'user',
+                        content: [
+                            {
+                                type: "text",
+                                text: "Extract all information in receipt, if there is no receipt in the image, please let me know."
+                            },
+                            {
+                                type: "image_url",
+                                image_url: {
+                                    url: base64Image
+                                }
+                            }
+                        ]
+                    },
+                ]
+            };
+    
+            // Send API request
+            const response = await axios.post(url, imgData, {
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json',
+                }
             });
-            alert('Image uploaded successfully!');
+    
+            const message = response.data.choices[0].message.content;
+            alert(message);
         } catch (error) {
             setErrorMessage('Failed to upload image, please try again.');
+            console.error('Error uploading image:', error);
         }
     };
 
