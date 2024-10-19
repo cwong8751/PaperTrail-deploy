@@ -34,7 +34,7 @@ async function connectToMongoAndStartServer() {
     await client.connect();
     console.log("MongoDB connected");
     // Initialize the users collection
-    usersCollection = client.db('mydatabase').collection('users'); // Replace 'mydatabase' with your actual database name
+    usersCollection = client.db('hackwashu2024').collection('Users'); // Replace 'mydatabase' with your actual database name
 
     // Start the server only after connecting to MongoDB
     const PORT = process.env.PORT || 8090;
@@ -50,30 +50,25 @@ async function connectToMongoAndStartServer() {
 
 connectToMongoAndStartServer();
 
-// API: Register a new user
+//Register a new user
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
+
+  // Debugging: Log the incoming data
+  console.log("Registering user with username:", username, "and password:", password);
 
   if (!username || !password) {
     return res.status(400).json({ error: 'Username and password are required' });
   }
 
   try {
-    // Check if user already exists
     const existingUser = await usersCollection.findOne({ username });
     if (existingUser) {
       return res.status(400).json({ error: 'User already exists' });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Save user to database
-    await usersCollection.insertOne({
-      username,
-      password: hashedPassword,
-    });
-
+    await usersCollection.insertOne({ username, password: hashedPassword });
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
     console.error('Registration error:', error);
@@ -81,30 +76,28 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// API: Login a user
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
+
+  // Debugging: Log the incoming data
+  console.log("Logging in user with username:", username, "and password:", password);
 
   if (!username || !password) {
     return res.status(400).json({ error: 'Username and password are required' });
   }
 
   try {
-    // Check if user exists
     const user = await usersCollection.findOne({ username });
     if (!user) {
-      console.log("username does not exist")
-      return res.status(400).json({ error: 'username does not exist' });
+      console.log("Username does not exist");
+      return res.status(400).json({ error: 'Username does not exist' });
     }
 
-    // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      console.log("hello")
-      return res.status(400).json({ error: 'password does not match' });
+      return res.status(400).json({ error: 'Invalid username or password' });
     }
 
-    // Create JWT token
     const token = jwt.sign(
       { userId: user._id, username: user.username },
       JWT_SECRET,

@@ -7,27 +7,29 @@ const Register = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setErrorMessage(''); // Clear previous errors
     setSuccessMessage(''); // Clear previous success message
+  
+    // Log the username and password before making the request
+    console.log("Sending registration data:", { username, password });
   
     try {
       const response = await axios.post('http://localhost:8090/register', {
         username,
         password
       });
-  
-      if (response.data.token) {
-        // Store JWT in local storage (or cookies, depending on your needs)
-        localStorage.setItem('authToken', response.data.token);
-        setSuccessMessage('Login successful!');
+      console.log(response)
+      if (response.data.message) {
+        setSuccessMessage('Registration successful!');
+        alert("successfully registered");
       }
     } catch (error) {
       if (error.response && error.response.data) {
         setErrorMessage(error.response.data.error);
       } else {
-        setErrorMessage('An error occurred during login.');
+        setErrorMessage('An error occurred during registration.');
       }
     }
   };
@@ -36,7 +38,7 @@ const Register = () => {
   return (
     <div className="login-container">
       <h2>Register</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleRegister}>
         <div>
           <label htmlFor="username">Username:</label>
           <input
