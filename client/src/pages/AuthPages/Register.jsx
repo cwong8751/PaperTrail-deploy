@@ -26,7 +26,7 @@ export default function Register() {
                 body: JSON.stringify({
                     username: username,
                     password: password,
-                    email: email,
+                    // email: email,
                 }),
             });
 
@@ -70,8 +70,8 @@ export default function Register() {
                         <input className='border border-gray-200 shadow-md hover:shadow-2xl' type="text" name="username" placeholder='username here' onChange={(e) => setUsername(e.target.value)} required />
                         <h2>What is your password?</h2>
                         <input className='border border-gray-200 shadow-md hover:shadow-2xl' type="password" name="password" placeholder='password here' onChange={(e) => setPassword(e.target.value)} required />
-                        <h2>What is your email?</h2>
-                        <input className='border border-gray-200 shadow-md hover:shadow-2xl' type="email" name="email" placeholder='email here' onChange={(e) => setEmail(e.target.value)} required />
+                        {/* <h2>What is your email?</h2>
+                        <input className='border border-gray-200 shadow-md hover:shadow-2xl' type="email" name="email" placeholder='email here' onChange={(e) => setEmail(e.target.value)} required /> */}
                         <br />
                         <button className='border border-gray-200 shadow-md hover:shadow-2xl p-2.5' type="submit" disabled={isLoading}>
                             {isLoading ? 'Loading...' : 'Submit'}

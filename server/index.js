@@ -128,16 +128,16 @@ client.connect((err) => {
 
 // API: Register a new user
 app.post('/register', async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, password } = req.body;
 
     // Input validation
-    if (!username || !email || !password) {
-        return res.status(400).json({ error: 'Username, email, and password are required' });
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Username, and password are required' });
     }
 
     try {
         // Check if user already exists
-        const existingUser = await usersCollection.findOne({ email });
+        const existingUser = await usersCollection.findOne({ username });
         if (existingUser) {
             return res.status(400).json({ error: 'User already exists' });
         }
@@ -148,7 +148,6 @@ app.post('/register', async (req, res) => {
         // Save user to database
         await usersCollection.insertOne({
             username,
-            email,
             password: hashedPassword, // Store hashed password
         });
 
@@ -161,16 +160,16 @@ app.post('/register', async (req, res) => {
 
 // API: Login a user
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
     // Input validation
-    if (!email || !password) {
+    if (!username || !password) {
         return res.status(400).json({ error: 'Email and password are required' });
     }
 
     try {
         // Check if user exists
-        const user = await usersCollection.findOne({ email });
+        const user = await usersCollection.findOne({ username });
         if (!user) {
             return res.status(400).json({ error: 'Invalid email or password' });
         }
@@ -183,7 +182,7 @@ app.post('/login', async (req, res) => {
 
         // Create JWT token
         const token = jwt.sign(
-            { userId: user._id, email: user.email },
+            { userId: user._id, username: user.username },
             JWT_SECRET,
             { expiresIn: '1h' } // Token expires in 1 hour
         );
