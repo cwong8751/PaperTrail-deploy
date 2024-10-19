@@ -23,9 +23,10 @@ captureButton.addEventListener('click', () => {
   const imageData = canvas.toDataURL('image/png');
   
   // Now you can use the imageData variable (it's a base64 encoded image)
-  console.log("Captured image data:", imageData);
+  //console.log("Captured image data:", imageData);
 
-  testRequest("Decipher an image"); // send test request 
+  //testRequest("Decipher this image: "); // send test request 
+  testRequest(imageData); // send image data to API
 });
 
 
@@ -33,6 +34,30 @@ async function testRequest(input) {
     const apiKey = "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";
     const url = "https://api.openai.com/v1/chat/completions";
     
+
+    // request for image input
+    const imgData =  {
+        model: 'gpt-4o-mini',
+        messages: [
+            {
+                role: 'user',
+                content: [
+                    {
+                        type: "text",
+                        text: "Extract all information in receipt, if there is no receipt in the image, please let me know.",
+                    },
+                    {
+                        type: "image_url",
+                        image_url: {
+                            url: input
+                        }
+                    }
+                ]
+            },
+        ]
+    }
+
+    // request for text input 
     const data = {
         model: 'gpt-4o',
         messages: [
@@ -47,19 +72,25 @@ async function testRequest(input) {
         ]
     }
 
+    // request general 
     const response = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${apiKey}`
         },
-        body: JSON.stringify(data) 
+        body: JSON.stringify(imgData) // change to imgData for image input
     });
 
+
     if (!response.ok) {
-        throw new Error('Error communicating with OpenAI: ' + response.statusText);
+        throw new Error('Error: ' + response.statusText);
     }
 
     const result = await response.json();
-    console.log('ChatGPT Response:', result.choices[0].message.content);
+    const message = result.choices[0].message.content;
+
+    //console.log('ChatGPT Response:', message);
+
+    document.getElementById('api-response').innerHTML = message;
 }
