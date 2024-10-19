@@ -3,8 +3,9 @@ import Home from './pages/Home'
 import { Routes, Route } from 'react-router-dom'
 import './App.css'
 import { Login, Register } from './pages/AuthPages'
+import { ChatInterface, RealTimeOCR } from './pages/ChatInterface'
 function App() {
-  const [count, setCount] = useState(0)
+
 
   return (
     <>
@@ -13,6 +14,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login/*" element={<Login />} />
         <Route path="/register/*" element={<Register />} />
+        <Route path="/chat/:userid" element={<ChatInterface />} />
+        <Route path="/face-detection/:userid" element={<RealTimeOCR />} />
       </Routes>
     </>
   )
