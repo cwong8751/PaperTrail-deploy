@@ -23,6 +23,9 @@ const ProductPage = () => {
     const openPopup = () => setIsOpen(true);
     const closePopup = () => setIsOpen(false);
 
+    // set progress bar
+    const [loading, setLoading] = useState(false);
+
     // Start webcam stream
     useEffect(() => {
         const videoElement = document.getElementById('video');
@@ -39,6 +42,8 @@ const ProductPage = () => {
 
     // chat request code
     const makeRequest = async (input) => {
+        setLoading(true);
+
         const apiKey = "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";
         const url = "https://api.openai.com/v1/chat/completions";
 
@@ -80,6 +85,8 @@ const ProductPage = () => {
 
         const result = await response.json();
         const message = result.choices[0].message.content;
+
+        setLoading(false);
 
         return message;
     };
@@ -226,7 +233,7 @@ const ProductPage = () => {
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div className="bg-white rounded-lg shadow-lg p-6 w-1/3">
                     <h2 className="text-lg font-semibold mb-4">Error</h2>
-                    <p className="mb-4">We did not find any receipts in the image</p>
+                    <p className="mb-4">We did not find any receipts</p>
                     <div className="flex justify-end">
                         <button
                             className="px-4 py-2 bg-red-500 text-white rounded"
@@ -240,6 +247,17 @@ const ProductPage = () => {
         );
     };
 
+    // progress circle modal
+    const ProgressModal = ({ show, children }) => {
+        if (!show) return null;
+        return (
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+                <div className="bg-white p-6 rounded shadow-lg">
+                    {children}
+                </div>
+            </div>
+        );
+    };
 
     // final confirmation popup, do something with the transaction date and amount 
     const handleConfirmationPopupSubmit = (date, amount) => {
@@ -274,6 +292,7 @@ const ProductPage = () => {
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div className="bg-white rounded-lg shadow-lg p-6 w-1/3">
                     <h2 className="text-lg font-semibold mb-4">Transaction Confirmation</h2>
+                    <p className='text-sm mb-4'>Please confirm the information below, we might make mistakes</p>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="transactionDate">
                             Transaction Date
@@ -368,6 +387,9 @@ const ProductPage = () => {
             </div>
             <ErrorPopup isOpen={isOpen} onClose={closePopup} />
             <ConfirmationPopup isOpen={isConfirmationOpen} onClose={closeConfirmationPopup} onSubmit={handleConfirmationPopupSubmit} />
+            <ProgressModal show={loading}>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Looking at your receipt</label>
+            </ProgressModal>
         </div>
     );
 };
