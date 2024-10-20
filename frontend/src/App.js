@@ -7,6 +7,7 @@ import Homepage from './components/Homepage';
 import LearnMore from './components/LearnMore';
 import ReadyToGo from './components/ReadyToGo';
 import ProductPage from './components/Product';
+import FinanceManager from './components/FinanceManager';
 import GetAccessToken from './finance/GetAccessToken';
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="/learn-more" element={<LearnMore/>} />
           <Route path="/ready" element={<ReadyToGo />} />
           <Route path="/product" element={<ProductPage />} />
+          <Route path="/financemanager" element={<FinanceManager />} />
           <Route path="/test" element={<GetAccessToken />} />
           <Route path="/" element={<Homepage />} />
           {/* <Route path="*" element={<Navigate to="/register" />} /> Catch-all route */}

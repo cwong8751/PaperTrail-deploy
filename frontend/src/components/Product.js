@@ -341,6 +341,9 @@ const ProductPage = () => {
                 <Link className="bg-blue-500 text-white rounded-md px-4 py-2 shadow-md hover:bg-blue-600 transition-all" to="/">
                     Return to Home
                 </Link>
+                <Link className="bg-blue-500 text-white rounded-md px-4 py-2 shadow-md hover:bg-blue-600 transition-all" to="/financemanager">
+                    Finance Manager
+                </Link>
             </div>
             <div className="max-w-7xl mx-auto">
                 <h1 className="text-5xl font-bold text-center mb-10">Explore Our Product's Functionality</h1>
