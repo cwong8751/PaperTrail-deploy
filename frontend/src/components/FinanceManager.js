@@ -20,12 +20,12 @@ const FinanceManager = () => {
                     Finance Manager
                 </Link>
             </div>
-            <div className='fixed bottom-5 left-1/2 transform -translate-x-1/2 items-center justify-center flex flex-col'>
-                <Histogram data={dummyData} />
-            </div>
 
             <div className="container mx-auto p-4 pt-24">
                 <h1 className="text-2xl font-semibold text-gray-800">Finance Manager</h1>
+
+                <Histogram data={dummyData} />
+
                 <h2 className="text-xl font-semibold text-gray-700 mt-6">Your Receipts</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                     <ReceiptNoteCard transactionDate="2021-08-01" transactionAmount={100.00} />
