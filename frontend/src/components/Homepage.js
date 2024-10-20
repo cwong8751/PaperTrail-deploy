@@ -15,40 +15,42 @@ const Homepage = () => {
   console.log(authenticated)
   return (
     <div className="relative min-h-screen bg-gray-50">
-      {/* Header with Login and Sign Up Buttons */}
-      <div className="fixed top-0 z-50 w-full p-4 border-b bg-white flex justify-between items-center space-x-4 shadow-md">
-        <img src={logo} alt="Logo" className="h-10" />
-        <div className="flex space-x-4"></div>
-        {authenticated ? (
-          <><Link
-            className="bg-blue-500 text-white rounded-md px-4 py-2 shadow-md hover:bg-blue-600 transition-all"
-            to="/product"
-          >
-            Product
-          </Link>
-          <button
+      {/* Header with Logo, Login, Sign Up, and Logout Buttons */}
+      <div className="fixed top-0 z-50 w-full p-4 border-b bg-white flex justify-between items-center shadow-md">
+        <img src={logo} alt="Logo" className="h-10" /> {/* Adjust the height as needed */}
+        <div className="flex space-x-4">
+          {authenticated ? (
+            <>
+              <Link
+                className="bg-blue-500 text-white rounded-md px-4 py-2 shadow-md hover:bg-blue-600 transition-all"
+                to="/product"
+              >
+                Product
+              </Link>
+              <button
                 className="bg-red-500 text-white rounded-md px-4 py-2 shadow-md hover:bg-red-600 transition-all"
                 onClick={handleLogout}
               >
                 Logout
-          </button></>
-        ) : (
-          <>
-            <Link
-              className="bg-blue-500 text-white rounded-md px-4 py-2 shadow-md hover:bg-blue-600 transition-all"
-              to="/login"
-            >
-              Login
-            </Link>
-            <Link
-              className="bg-green-500 text-white rounded-md px-4 py-2 shadow-md hover:bg-green-600 transition-all"
-              to="/signup"
-            >
-              Sign Up
-            </Link>
-          </>
-        )}
-
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                className="bg-blue-500 text-white rounded-md px-4 py-2 shadow-md hover:bg-blue-600 transition-all"
+                to="/login"
+              >
+                Login
+              </Link>
+              <Link
+                className="bg-green-500 text-white rounded-md px-4 py-2 shadow-md hover:bg-green-600 transition-all"
+                to="/signup"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Hero Section */}
