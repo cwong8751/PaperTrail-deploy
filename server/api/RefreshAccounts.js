@@ -1,5 +1,5 @@
 import axios from "axios";
-async function RefreshAccounts(req, res) {
+export async function RefreshAccounts(req, res) {
     const {token, customerId} = req.body
     let data = JSON.stringify({});
 
@@ -26,4 +26,3 @@ async function RefreshAccounts(req, res) {
         });
 
 }
-module.exports = { RefreshAccounts };

@@ -5,13 +5,11 @@ import { MongoClient, ServerApiVersion } from 'mongodb';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-
 import { CreateAccessToken } from './api/CreateAccessToken.js';
-// import { GenerateLink } from './api/GenerateLink.js';  // Import GenerateLink
-// import { AddCustomer } from './api/AddCustomer.js';  // Import AddCustomer
-// import { RefreshAccounts } from './api/RefreshAccounts.js';  // Import RefreshAccounts
-// import { GetTransactions } from './api/GetTransactions.js';  // Import GetTransactions
-
+import { GenerateLink } from './api/GenerateLink.js';
+import { AddCustomer } from './api/AddCustomer.js';
+import { GetTransactions } from './api/GetTransactions.js';
+import { RefreshAccounts } from './api/RefreshAccounts.js';
 dotenv.config();
 const app = express();
 app.use(express.json()); // To parse JSON request bodies
@@ -133,63 +131,7 @@ app.get('/protected', async (req, res) => {
 });
 
 app.get('/create-access-token', CreateAccessToken);
-
-// // Route to generate a link with a customer ID
-// app.post('/generate-link', async (req, res) => {
-//   const { token, customerId } = req.body;  // Expecting customerId to be in the request body
-
-//   if (!customerId || !token) {
-//     return res.status(400).json({ error: 'customerId and token are required' });
-//   }
-
-//   try {
-//     await GenerateLink(token, customerId);
-//     res.status(200).json({ message: 'Link generated successfully' });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-
-// app.post('/add-customer', async (req, res) => {
-//   const { token } = req.body;  // Expecting token to be in the request body
-
-//   if (!token) {
-//     return res.status(400).json({ error: 'token is required' });
-//   }
-//   try {
-//     await AddCustomer(token)
-//     res.status(200).json({ message: 'Link generated successfully' });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-
-// app.post('/get-transactions', async (req, res) => {
-//   const { token, customerId, accountId, fromDate, toDate } = req.body;  // Expecting token to be in the request body
-
-//   if (!customerId || !accountId || !fromDate || !toDate || !token ) {
-//     return res.status(400).json({ error: 'Information is missing' });
-//   }
-
-//   try {
-//     await GetTransactions(token, customerId, accountId, fromDate, toDate)
-//     res.status(200).json({ message: 'Transactions fetched successfully' });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-
-// app.post('/refresh-accounts', async (req, res) => {
-//   const { token, customerId } = req.body;  // Expecting token to be in the request body
-
-//   if (!customerId || !token ) {
-//     return res.status(400).json({ error: 'customer information and token are missing' });
-//   }
-
-//   try {
-//     await RefreshAccounts(token, customerId)
-//     res.status(200).json({ message: 'Accounts fetched successfully' });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
+app.post('/add-customer', AddCustomer);
+app.post('/generate-link', GenerateLink);
+app.post('/get-transactions', GetTransactions);
+app.post('/refresh-accounts', RefreshAccounts);

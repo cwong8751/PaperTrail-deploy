@@ -1,8 +1,10 @@
 import axios from "axios";
 export async function AddCustomer(req, res) {
     const { token } = req.body
+    const timestamp = new Date().getTime()
+    console.log("add customer right now, ", token)
     let data = JSON.stringify({
-        "username": "customer_1729382472",
+        "username": timestamp,
         "firstName": "John",
         "lastName": "Smith"
     });

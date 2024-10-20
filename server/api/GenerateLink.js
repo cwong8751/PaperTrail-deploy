@@ -2,12 +2,13 @@ import axios from "axios";
 
 export async function GenerateLink(req, res) {
     const { token, customerId } = req.body
+    console.log("generate link right now, ", token, customerId)
     let data = JSON.stringify({
         "partnerId": "2445584660427",
         "customerId": `${customerId}`,
         "language": "en",
         "consumerId": "0bf46322c167b562e6cbed9d40e19a4c",
-        "redirectUri": "https://www.finicity.com/connect/",
+        "redirectUri": "http://localhost:3000",
         "webhookContentType": "application/json",
         "webhookData": {},
         "webhookHeaders": {},
