@@ -1,117 +1,180 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import { Connect, ConnectEventHandlers, ConnectOptions } from 'connect-web-sdk'; // Assuming this is the SDK import
+
 const GetAccessToken = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [token, setToken] = useState(localStorage.getItem("token"));
-    const [customerId, setCustomerId] = useState(localStorage.getItem("customerId"))
-    const [link, setLink] = useState(null)
-    const [accounts, setAccounts] = useState(localStorage.getItem("accounts"))
+    const [customerId, setCustomerId] = useState(localStorage.getItem("customerId"));
+    const [link, setLink] = useState(null);
+    const [accounts, setAccounts] = useState(localStorage.getItem("accounts"));
+
     const handleGetToken = async (e) => {
         e.preventDefault();
         try {
-            // Fetch the token from the backend
             const response = await axios.get('http://localhost:8090/create-access-token');
-            // Assuming the token is returned in the response body
             const parsedData = JSON.parse(response.data);
-            // Assuming the token is returned as { "token": "your-token-here" }
             const NewToken = parsedData.token;
-            // Store the token in localStorage
             localStorage.setItem("token", NewToken);
             setToken(NewToken);
-
-            // Notify the user of success
             alert('Token generated successfully!');
         } catch (error) {
-            // Handle any errors
             alert('Failed to generate token, please try again.');
             console.error('Error generating token:', error);
         }
-    };
-    const handleGetCustomerId = async (e) => {
-        e.preventDefault();
-        console.log(token)
         try {
-            // Fetch the token from the backend
             const response = await axios.post('http://localhost:8090/add-customer', {
                 token: token
             });
-            // Assuming the token is returned in the response body
-            // {"id":"7033720937","username":"customer_1729382472","createdDate":"1729389906"}
-            console.log(response)
-            const customerId = response.data.id
-            const username = response.data.username
-            const createdDate = response.data.createdDate
-            // Assuming the token is returned as { "token": "your-token-here" }
-            // Store the token in localStorage
+            const customerId = response.data.id;
             localStorage.setItem("customerId", customerId);
-            localStorage.setItem("username", username);
-            localStorage.setItem("createdDate", createdDate);
             setCustomerId(customerId);
-            // Notify the user of success
             alert('Customer ID fetched successfully!');
         } catch (error) {
-            // Handle any errors
             alert('Failed to fetch customer ID, please try again.');
-            console.error('Error generating token:', error);
+            console.error('Error fetching customer ID:', error);
         }
-    };
-    const handleGenerateLink = async (e) => {
-        e.preventDefault();
         try {
-            // Fetch the token from the backend
             const response = await axios.post('http://localhost:8090/generate-link', {
                 token: token,
                 customerId: customerId
             });
-            // Assuming the token is returned in the response body
-            // Assuming the token is returned as { "token": "your-token-here" }
             const link = response.data.link;
-            console.log(response)
-            // Store the token in localStorage
             localStorage.setItem("link", link);
             setLink(link);
-            console.log(link)
-            // Notify the user of success
-            window.location.href = link;
+            // Now launch the Mastercard Connect Web SDK with the generated link
+            launchConnect(link);
         } catch (error) {
-            // Handle any errors
-            alert('Failed to fetch customer ID, please try again.');
-            console.error('Error generating token:', error);
+            alert('Failed to generate link, please try again.');
+            console.error('Error generating link:', error);
         }
+        try {
+            const response = await axios.post('http://localhost:8090/get-accounts', {
+                token: token,
+                customerId: customerId,
+                username: localStorage.getItem('username')
+            });
+            const data = response.data;
+            localStorage.setItem("accountData", data);
+        } catch (error) {
+            alert('Failed to generate link, please try again.');
+            console.error('Error generating link:', error);
+        }
+    };
+
+    const handleGetCustomerId = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:8090/add-customer', {
+                token: token
+            });
+            const customerId = response.data.id;
+            localStorage.setItem("customerId", customerId);
+            setCustomerId(customerId);
+            alert('Customer ID fetched successfully!');
+        } catch (error) {
+            alert('Failed to fetch customer ID, please try again.');
+            console.error('Error fetching customer ID:', error);
+        }
+    };
+
+    const handleGenerateLink = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:8090/generate-link', {
+                token: token,
+                customerId: customerId
+            });
+            const link = response.data.link;
+            localStorage.setItem("link", link);
+            setLink(link);
+            // Now launch the Mastercard Connect Web SDK with the generated link
+            launchConnect(link);
+        } catch (error) {
+            alert('Failed to generate link, please try again.');
+            console.error('Error generating link:', error);
+        }
+        try {
+            const response = await axios.post('http://localhost:8090/get-accounts', {
+                token: token,
+                customerId: customerId
+            });
+            const data = response.data;
+            localStorage.setItem("accountData", data);
+        } catch (error) {
+            alert('Failed to generate link, please try again.');
+            console.error('Error generating link:', error);
+        }
+    };
+
+    const launchConnect = (connectURL) => {
+        const connectEventHandlers = {
+            onDone: (event) => { console.log('Done:', event); },
+            onCancel: (event) => { console.log('Cancelled:', event); },
+            onError: (event) => { console.error('Error:', event); },
+            onRoute: (event) => { console.log('Route change:', event); },
+            onUser: (event) => { console.log('User info:', event); },
+            onLoad: () => { console.log('Connect loaded'); }
+        };
+
+        const connectOptions = {
+            popup: true,  // Use popup mode
+            popupOptions: {
+                width: 600,
+                height: 600,
+                top: window.top.outerHeight / 2 + window.top.screenY - (600 / 2),
+                left: window.top.outerWidth / 2 + window.top.screenX - (600 / 2)
+            },
+            redirectUrl: 'http://localhost:3000',  // Set the redirect URL when the user is done
+        };
+
+        // Launch the Connect SDK with the generated link
+        Connect.launch(connectURL, connectEventHandlers, connectOptions);
     };
 
     const handleAccountDetails = async (e) => {
         e.preventDefault();
         try {
-            // Fetch the token from the backend
             const response = await axios.post('http://localhost:8090/refresh-accounts', {
                 token: token,
                 customerId: customerId
             });
-            // Assuming the token is returned in the response body
-            // Assuming the token is returned as { "token": "your-token-here" }
             const accounts = response.data.accounts;
-            console.log(accounts)
-            // Store the token in localStorage
             localStorage.setItem("accounts", accounts);
-            setAccounts(accounts)
-            // Notify the user of success
+            setAccounts(accounts);
         } catch (error) {
-            // Handle any errors
-            alert('Failed to fetch customer ID, please try again.');
-            console.error('Error generating token:', error);
+            alert('Failed to fetch account details, please try again.');
+            console.error('Error fetching account details:', error);
         }
     };
+    const handleGetAccounts = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:8090/get-accounts', {
+                token: token,
+                customerId: customerId
+            });
+            const data = response.data;
+            localStorage.setItem("accountData", data);
+        } catch (error) {
+            alert('Failed to generate link, please try again.');
+            console.error('Error generating link:', error);
+        }
+    };
+    // Clean up the Connect SDK when the component unmounts
+    useEffect(() => {
+        return () => {
+            Connect.destroy();
+        };
+    }, []);
 
     return (
         <div className='min-h-screen flex items-center justify-center bg-gray-50'>
             <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-md">
                 <div className="text-center mb-6">
                     <h2 className="text-4xl font-bold">Get Access Token</h2>
-                    {/* Show the token if it exists */}
                     <p>Token: {token || "No token yet"}</p>
-                    {/* Correctly calling the handleGetToken function on button click */}
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         onClick={handleGetToken}
@@ -121,9 +184,7 @@ const GetAccessToken = () => {
                 </div>
                 <div className="text-center mb-6">
                     <h2 className="text-4xl font-bold">Get Customer ID</h2>
-                    {/* Show the token if it exists */}
                     <p>Customer ID: {customerId || "No token yet"}</p>
-                    {/* Correctly calling the handleGetToken function on button click */}
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         onClick={handleGetCustomerId}
@@ -133,29 +194,23 @@ const GetAccessToken = () => {
                 </div>
                 <div className="text-center mb-6">
                     <h2 className="text-4xl font-bold">Generate Link</h2>
-                    {/* Show the token if it exists */}
                     <p>Generate Link to Connect Your Bank Account</p>
-                    {/* Correctly calling the handleGetToken function on button click */}
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         onClick={handleGenerateLink}
                     >
                         Click Here
                     </button>
-                    
                 </div>
                 <div className="text-center mb-6">
                     <h2 className="text-4xl font-bold">Get Account Details</h2>
-                    {/* Show the token if it exists */}
                     <p>Get Account Details</p>
-                    {/* Correctly calling the handleGetToken function on button click */}
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        onClick={handleAccountDetails}
+                        onClick={handleGetAccounts}
                     >
                         Click Here
                     </button>
-                    
                 </div>
             </div>
         </div>

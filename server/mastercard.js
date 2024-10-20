@@ -22,7 +22,7 @@ async function getTransactions() {
             `${baseUrl}/aggregation/v4/customers/${customerId}/accounts/${accountId}/transactions`,
             {
                 headers: {
-                    'Finicity-App-Key': '014c38b1a3bf877792ce1a12a3a9bca9',
+                    'Finicity-App-Key': 'c8d9b6238bb579c4305877e604b0180e',
                     'Content-Type': 'application/json',
                     'Finicity-App-Token': 'FV9xpSG60MRHCpa6XH4E'
                 },
@@ -52,8 +52,8 @@ async function getTransactions() {
 // Fetch Access Token
 async function CreateAccessToken() {
     let data = JSON.stringify({
-        "partnerId": "2445584660427",
-        "partnerSecret": "fhnzOlv9cOcQT2yQYLYz"
+        "partnerId": "2445584660661",
+        "partnerSecret": "c06ndfJ5RO1JZqEKBKVz"
     });
 
     let config = {
@@ -62,7 +62,7 @@ async function CreateAccessToken() {
         url: 'https://api.finicity.com/aggregation/v2/partners/authentication',
         headers: {
             'Content-Type': 'application/json',
-            'Finicity-App-Key': "014c38b1a3bf877792ce1a12a3a9bca9",
+            'Finicity-App-Key': "c8d9b6238bb579c4305877e604b0180e",
             'Accept': 'application/json'
         },
         data: data
@@ -93,7 +93,7 @@ async function AddCustomer(token) {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Finicity-App-Key': '014c38b1a3bf877792ce1a12a3a9bca9',
+            'Finicity-App-Key': 'c8d9b6238bb579c4305877e604b0180e',
             'Finicity-App-Token': token
         },
         data: data
@@ -111,7 +111,7 @@ async function AddCustomer(token) {
 
 async function GenerateLink(token, customerId) {
     let data = JSON.stringify({
-        "partnerId": "2445584660427",
+        "partnerId": "2445584660661",
         "customerId": `${customerId}`,
         "language": "en",
         "consumerId": "0bf46322c167b562e6cbed9d40e19a4c",
@@ -148,7 +148,7 @@ async function GenerateLink(token, customerId) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Finicity-App-Token': token,
-            'Finicity-App-Key': '014c38b1a3bf877792ce1a12a3a9bca9'
+            'Finicity-App-Key': 'c8d9b6238bb579c4305877e604b0180e'
         },
         data: data
     };
@@ -175,7 +175,7 @@ async function RefreshAccounts(token) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Finicity-App-Token': token,
-            'Finicity-App-Key': '014c38b1a3bf877792ce1a12a3a9bca9'
+            'Finicity-App-Key': 'c8d9b6238bb579c4305877e604b0180e'
         },
         data: data
     };

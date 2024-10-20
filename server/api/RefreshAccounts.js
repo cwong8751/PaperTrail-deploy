@@ -1,6 +1,6 @@
 import axios from "axios";
 export async function RefreshAccounts(req, res) {
-    const {token, customerId} = req.body
+    const { token, customerId } = req.body
     let data = JSON.stringify({});
 
     let config = {
@@ -11,7 +11,7 @@ export async function RefreshAccounts(req, res) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Finicity-App-Token': token,
-            'Finicity-App-Key': '014c38b1a3bf877792ce1a12a3a9bca9'
+            'Finicity-App-Key': 'c8d9b6238bb579c4305877e604b0180e'
         },
         data: data
     };
@@ -22,7 +22,7 @@ export async function RefreshAccounts(req, res) {
         })
         .catch((error) => {
             console.log(error);
-            return {error: "something is wrong"}
+            return { error: "something is wrong" }
         });
 
 }

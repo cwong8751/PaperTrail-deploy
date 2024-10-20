@@ -22,6 +22,7 @@ const Login = () => {
 
       if (response.data.token) {
         localStorage.setItem('authToken', response.data.token);
+        localStorage.setItem('username', username);
         setSuccessMessage('Login successful!');
         alert("Login successfully");
 

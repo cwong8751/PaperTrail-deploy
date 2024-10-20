@@ -11,6 +11,7 @@ import { GenerateLink } from './api/GenerateLink.js';
 import { AddCustomer } from './api/AddCustomer.js';
 import { GetTransactions } from './api/GetTransactions.js';
 import { RefreshAccounts } from './api/RefreshAccounts.js';
+import { GetAccounts } from './api/GetAccounts.js';
 dotenv.config();
 const app = express();
 app.use(express.json()); // To parse JSON request bodies
@@ -147,3 +148,4 @@ app.post('/add-customer', AddCustomer);
 app.post('/generate-link', GenerateLink);
 app.post('/get-transactions', GetTransactions);
 app.post('/refresh-accounts', RefreshAccounts);
+app.post('/get-accounts', GetAccounts)

@@ -6,7 +6,7 @@ export async function GetTransactions(req, res) {
         maxBodyLength: Infinity,
         url: `https://api.finicity.com/aggregation/v4/customers/${customerId}/accounts/${accountId}/transactions?fromDate=${fromDate}&includePending=true&toDate=${toDate}`,
         headers: { 
-          'Finicity-App-Key': '014c38b1a3bf877792ce1a12a3a9bca9', 
+          'Finicity-App-Key': 'c8d9b6238bb579c4305877e604b0180e', 
           'Accept': 'application/json', 
           'Finicity-App-Token': token
         }

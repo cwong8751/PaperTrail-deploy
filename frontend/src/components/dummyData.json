@@ -1,0 +1,388 @@
+{
+  "username": "johndoe",
+  "password": "hashed_password",
+  "customerId": "7033717119",
+  "bankAccounts": [
+    {
+      "accountId": "7059349896",
+      "transactions": [
+        {
+          "transactionDate": "2024-10-19",
+          "transactionAmount": -50.50
+        },
+        {
+          "transactionDate": "2024-10-18",
+          "transactionAmount": 4791.46
+        },
+        {
+          "transactionDate": "2024-10-17",
+          "transactionAmount": -56.65
+        },
+        {
+          "transactionDate": "2024-10-16",
+          "transactionAmount": -5.15
+        },
+        {
+          "transactionDate": "2024-10-15",
+          "transactionAmount": -6.43
+        }
+        ,{
+          "transactionDate": "2024-10-16",
+          "transactionAmount": -214.24
+        },
+        {
+          "transactionDate": "2024-10-16",
+          "transactionAmount": -53.98
+        },
+        {
+          "transactionDate": "2024-10-12",
+          "transactionAmount": -339.19
+        },
+        {
+          "transactionDate": "2024-10-11",
+          "transactionAmount": -283.11
+        },
+        {
+          "transactionDate": "2024-10-09",
+          "transactionAmount": -1463.18
+        },
+        {
+          "transactionDate": "2024-10-09",
+          "transactionAmount": -30.93
+        },
+        {
+          "transactionDate": "2024-10-09",
+          "transactionAmount": -99.84
+        },
+        {
+          "transactionDate": "2024-10-09",
+          "transactionAmount": -94.49
+        },
+        {
+          "transactionDate": "2024-10-08",
+          "transactionAmount": -663.41
+        },
+        {
+          "transactionDate": "2024-10-04",
+          "transactionAmount": 4791.46
+        },
+        {
+          "transactionDate": "2024-10-02",
+          "transactionAmount": -211.15
+        },
+        {
+          "transactionDate": "2024-09-30",
+          "transactionAmount": -50.50
+        },
+        {
+          "transactionDate": "2024-09-30",
+          "transactionAmount": -101.00
+        },
+        {
+          "transactionDate": "2024-09-27",
+          "transactionAmount": -10.10
+        },
+        {
+          "transactionDate": "2024-09-26",
+          "transactionAmount": -166.16
+        },
+        {
+          "transactionDate": "2024-09-24",
+          "transactionAmount": -50.50
+        },
+        {
+          "transactionDate": "2024-09-23",
+          "transactionAmount": 61.69
+        },
+        {
+          "transactionDate": "2024-09-20",
+          "transactionAmount": 4791.46
+        },
+        {
+          "transactionDate": "2024-09-20",
+          "transactionAmount": -101.00
+        },
+        {
+          "transactionDate": "2024-09-19",
+          "transactionAmount": -118.88
+        },
+        {
+          "transactionDate": "2024-09-17",
+          "transactionAmount": -202.00
+        },
+        {
+          "transactionDate": "2024-09-16",
+          "transactionAmount": -30.30
+        },
+        {
+          "transactionDate": "2024-09-16",
+          "transactionAmount": -101.00
+        },
+        {
+          "transactionDate": "2024-09-12",
+          "transactionAmount": -339.19
+        },
+        {
+          "transactionDate": "2024-09-12",
+          "transactionAmount": -4.12
+        },
+        {
+          "transactionDate": "2024-09-11",
+          "transactionAmount": -30.93
+        },
+        {
+          "transactionDate": "2024-09-11",
+          "transactionAmount": -330.05
+        },
+        {
+          "transactionDate": "2024-09-11",
+          "transactionAmount": -1463.18
+        },
+        {
+          "transactionDate": "2024-09-08",
+          "transactionAmount": 4791.46
+        },
+        {
+          "transactionDate": "2024-09-17",
+          "transactionAmount": -94.49
+        },
+        {
+          "transactionDate": "2024-09-17",
+          "transactionAmount": -20.58
+        },
+        {
+          "transactionDate": "2024-09-17",
+          "transactionAmount": -1647.42
+        },
+        {
+          "transactionDate": "2024-09-16",
+          "transactionAmount": -663.41
+        },
+        {
+          "transactionDate": "2024-09-16",
+          "transactionAmount": -3192.17
+        },
+        {
+          "transactionDate": "2024-09-12",
+          "transactionAmount": -202.00
+        },
+        {
+          "transactionDate": "2024-09-11",
+          "transactionAmount": -50.50
+        },
+        {
+          "transactionDate": "2024-09-10",
+          "transactionAmount": -166.16
+        },
+        {
+          "transactionDate": "2024-09-09",
+          "transactionAmount": -50.50
+        },
+        {
+          "transactionDate": "2024-09-09",
+          "transactionAmount": -524.95
+        },
+        {
+          "transactionDate": "2024-09-06",
+          "transactionAmount": -50.50
+        },
+        {
+          "transactionDate": "2024-09-06",
+          "transactionAmount": 4791.46
+        },
+        {
+          "transactionDate": "2024-09-04",
+          "transactionAmount": -101.00
+        },
+        {
+          "transactionDate": "2024-08-31",
+          "transactionAmount": -507.44
+        },
+        {
+          "transactionDate": "2024-08-27",
+          "transactionAmount": -50.50
+        },
+        {
+          "transactionDate": "2024-08-27",
+          "transactionAmount": -319.49
+        },
+        {
+          "transactionDate": "2024-08-27",
+          "transactionAmount": -339.19
+        },
+        {
+          "transactionDate": "2024-08-27",
+          "transactionAmount": 20.20
+        },
+        {
+          "transactionDate": "2024-08-24",
+          "transactionAmount": 4791.46
+        },
+        {
+          "transactionDate": "2024-08-24",
+          "transactionAmount": -3.06
+        },
+        {
+          "transactionDate": "2024-08-24",
+          "transactionAmount": -64.26
+        },
+        {
+          "transactionDate": "2024-08-23",
+          "transactionAmount": -1463.18
+        },
+        {
+          "transactionDate": "2024-08-22",
+          "transactionAmount": -31.21
+        },
+        {
+          "transactionDate": "2024-08-21",
+          "transactionAmount": -94.49
+        },
+        {
+          "transactionDate": "2024-08-20",
+          "transactionAmount": -663.41
+        }
+      ]
+  },
+      {"accountId": "7059349897",
+      "transactions": [
+        {
+          "transactionDate": "2024-08-14",
+          "transactionAmount": -50.50
+        },
+        {
+          "transactionDate": "2024-08-11",
+          "transactionAmount": 4791.46
+        },
+        {
+          "transactionDate": "2024-08-11",
+          "transactionAmount": -166.16
+        },
+        {
+          "transactionDate": "2024-08-10",
+          "transactionAmount": -3535.00
+        },
+        {
+          "transactionDate": "2024-08-10",
+          "transactionAmount": -404.00
+        },
+        {
+          "transactionDate": "2024-08-09",
+          "transactionAmount": 101.00
+        },
+        {
+          "transactionDate": "2024-08-09",
+          "transactionAmount": 1919.00
+        },
+        {
+          "transactionDate": "2024-08-09",
+          "transactionAmount": -221.45
+        },
+        {
+          "transactionDate": "2024-08-09",
+          "transactionAmount": -50.50
+        },
+        {
+          "transactionDate": "2024-08-03",
+          "transactionAmount": -61.09
+        },
+        {
+          "transactionDate": "2024-08-02",
+          "transactionAmount": -50.50
+        },
+        {
+          "transactionDate": "2024-08-02",
+          "transactionAmount": -314.32
+        },
+        {
+          "transactionDate": "2024-08-02",
+          "transactionAmount": -3236.61
+        },
+        {
+          "transactionDate": "2024-08-02",
+          "transactionAmount": -14.09
+        },
+        {
+          "transactionDate": "2024-08-01",
+          "transactionAmount": -50.50
+        },
+        {
+          "transactionDate": "2024-07-29",
+          "transactionAmount": 4791.46
+        },
+        {
+          "transactionDate": "2024-07-28",
+          "transactionAmount": -18.90
+        },
+        {
+          "transactionDate": "2024-07-28",
+          "transactionAmount": -220.51
+        },
+        {
+          "transactionDate": "2024-07-28",
+          "transactionAmount": -339.19
+        },
+        {
+          "transactionDate": "2024-07-27",
+          "transactionAmount": -33.01
+        },
+        {
+          "transactionDate": "2024-07-25",
+          "transactionAmount": -152.55
+        },
+        {
+          "transactionDate": "2024-07-25",
+          "transactionAmount": -1463.18
+        },
+        {
+          "transactionDate": "2024-07-25",
+          "transactionAmount": 83.45
+        },
+        {
+          "transactionDate": "2024-07-25",
+          "transactionAmount": -61.53
+        },
+        {
+          "transactionDate": "2024-07-25",
+          "transactionAmount": -151.50
+        },
+        {
+          "transactionDate": "2024-07-22",
+          "transactionAmount": -663.41
+        },
+        {
+          "transactionDate": "2024-07-21",
+          "transactionAmount": -174.38
+        },
+        {
+          "transactionDate": "2024-07-20",
+          "transactionAmount": 88.26
+        },
+        {
+          "transactionDate": "2024-07-19",
+          "transactionAmount": -56.20
+        },
+        {
+          "transactionDate": "2024-07-18",
+          "transactionAmount": -189.52
+        },
+        {
+          "transactionDate": "2024-07-18",
+          "transactionAmount": -40.40
+        },
+        {
+          "transactionDate": "2024-07-18",
+          "transactionAmount": -40.40
+        },
+        {
+          "transactionDate": "2024-07-15",
+          "transactionAmount": 4791.46
+        },
+        {
+          "transactionDate": "2024-07-14",
+          "transactionAmount": -166.18
+        }
+      ]
+    }
+  ]
+}

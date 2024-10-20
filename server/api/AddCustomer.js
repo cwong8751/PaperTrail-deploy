@@ -4,7 +4,7 @@ export async function AddCustomer(req, res) {
     const timestamp = new Date().getTime()
     console.log("add customer right now, ", token)
     let data = JSON.stringify({
-        "username": timestamp,
+        "username": `customer_${timestamp}`,
         "firstName": "John",
         "lastName": "Smith"
     });
@@ -16,7 +16,7 @@ export async function AddCustomer(req, res) {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Finicity-App-Key': '014c38b1a3bf877792ce1a12a3a9bca9',
+            'Finicity-App-Key': 'c8d9b6238bb579c4305877e604b0180e',
             'Finicity-App-Token': token
         },
         data: data

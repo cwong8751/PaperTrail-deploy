@@ -4,12 +4,10 @@ export async function GenerateLink(req, res) {
     const { token, customerId } = req.body
     console.log("generate link right now, ", token, customerId)
     let data = JSON.stringify({
-        "partnerId": "2445584660427",
+        "partnerId": "2445584660661",
         "customerId": `${customerId}`,
-        "language": "en",
         "consumerId": "0bf46322c167b562e6cbed9d40e19a4c",
-        "redirectUri": "http://localhost:3000",
-        "webhookContentType": "application/json",
+        "redirectUri": "https://google.com/",
         "webhookData": {},
         "webhookHeaders": {},
         "optionalConsumerInfo": {
@@ -18,7 +16,6 @@ export async function GenerateLink(req, res) {
         },
         "singleUseUrl": true,
         "institutionSettings": {},
-        "fromDate": 1607450357,
         "reportCustomFields": [
             {
                 "label": "loanID",
@@ -41,7 +38,7 @@ export async function GenerateLink(req, res) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Finicity-App-Token': token,
-            'Finicity-App-Key': '014c38b1a3bf877792ce1a12a3a9bca9'
+            'Finicity-App-Key': 'c8d9b6238bb579c4305877e604b0180e'
         },
         data: data
     };
