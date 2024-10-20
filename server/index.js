@@ -16,8 +16,6 @@ app.use(express.json()); // To parse JSON request bodies
 app.use(cors());
 app.use(bodyParser.json())
 
-const {MongoClient} = require('mongodb');
-
 const uri = process.env.MONGO_URI;
 const JWT_SECRET = process.env.JWT_SECRET;
 
