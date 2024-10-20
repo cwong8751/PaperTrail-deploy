@@ -69,7 +69,7 @@ const Histogram = ({ data }) => {
     }, [data, timeRange]);
 
     return (
-        <div className='border border-gray-200 shadow-md hover:shadow-2xl flex overflow-hidden max-w-[1400px] flex-col'>
+        <div className='border border-gray-200 shadow-md flex overflow-hidden max-w-[1400px] flex-col'>
             {/* Dropdown for selecting time range */}
             <div className='p-4'>
                 <label htmlFor='time-range' className='mr-2'>Select Time Range:</label>
@@ -87,7 +87,7 @@ const Histogram = ({ data }) => {
             </div>
 
             {/* Bar Chart */}
-            <div className='border border-gray-200 shadow-md hover:shadow-2xl'>
+            <div className='border border-gray-200 shadow-md'>
                 <BarChart
                     xAxis={[{ data: chartData.dates, scaleType: 'band' }]}
                     series={[
