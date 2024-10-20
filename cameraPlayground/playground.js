@@ -21,16 +21,23 @@ captureButton.addEventListener('click', () => {
 
   // Get the image data from the canvas as a data URL
   const imageData = canvas.toDataURL('image/png');
-  
-  // Now you can use the imageData variable (it's a base64 encoded image)
-  //console.log("Captured image data:", imageData);
 
-  //testRequest("Decipher this image: "); // send test request 
-  testRequest(imageData); // send image data to API
+  // get prompt from user
+  var prompt = document.getElementById('prompt').value;
+
+  if (prompt === "") {
+      prompt = "Extract all information in receipt, if there is no receipt in the image, please let me know.";
+  }
+
+  testRequest(imageData, prompt); // send image data to API, image already in base64 format
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('api-key').innerHTML = "API Key: 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";
 });
 
 
-async function testRequest(input) {
+async function testRequest(input, prompt) {
     const apiKey = "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";
     const url = "https://api.openai.com/v1/chat/completions";
     
@@ -44,7 +51,7 @@ async function testRequest(input) {
                 content: [
                     {
                         type: "text",
-                        text: "Extract all information in receipt, if there is no receipt in the image, please let me know.",
+                        text: prompt,
                     },
                     {
                         type: "image_url",
@@ -93,4 +100,6 @@ async function testRequest(input) {
     //console.log('ChatGPT Response:', message);
 
     document.getElementById('api-response').innerHTML = message;
+    let oresult = document.getElementById('response-list').innerHTML;
+    document.getElementById('response-list').innerHTML = oresult + "<li>" + message + "</li>";
 }
