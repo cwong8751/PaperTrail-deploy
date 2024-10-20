@@ -126,6 +126,29 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// app.post('/getallreceipts', async (req, res) => {
+//   const { username } = req.body;
+
+//   // Debugging: Log the incoming data
+//   console.log("Getting all receipts for user with username:", username);
+
+//   if (!username) {
+//     return res.status(400).json({ error: 'Username is required' });
+//   }
+
+//   try {
+//     const user = await usersCollection.findOne({ username });
+//     if (!user) {
+//       return res.status(400).json({ error: 'Username does not exist' });
+//     }
+
+//     res.json({ receipts: user.receipts });
+//   } catch (error) {
+//     console.error('Get all receipts error:', error);
+//     res.status(500).json({ error: 'Server error during get all receipts' });
+//   }
+// }
+
 // Protected route example (requires valid JWT)
 app.get('/protected', async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
