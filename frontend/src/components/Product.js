@@ -262,11 +262,11 @@ const ProductPage = () => {
     // final confirmation popup, do something with the transaction date and amount 
     const handleConfirmationPopupSubmit = (date, amount) => {
         // convert date back to epoch time
-        let epochTime = new Date(date).getTime() / 1000;
+        let transactionDate = new Date(date).getTime() / 1000;
         let transactionAmount = amount;
 
-        console.log(`THIS IS FINAL\nSubmitted Date: ${epochTime}, Submitted Amount: ${transactionAmount}`);
-        alert(`Submitted Date: ${epochTime}, Submitted Amount: ${transactionAmount}`);
+        console.log(`THIS IS FINAL\nSubmitted Date: ${transactionDate}, Submitted Amount: ${transactionAmount}`);
+        alert(`Submitted Date: ${transactionDate}, Submitted Amount: ${transactionAmount}`);
 
         //TODO: do something with the transaction date and amount
     };
