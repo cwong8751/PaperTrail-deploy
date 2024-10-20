@@ -9,10 +9,27 @@ const ProductPage = () => {
     const [imagePreview, setImagePreview] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
 
-    // confirmation dialog operations
-    const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
-    const openConfirmationPopup = () => setIsConfirmationOpen(true);
-    const closeConfirmationPopup = () => setIsConfirmationOpen(false);
+    // State to hold the list of usernames
+    const [usernames, setUsernames] = useState([]);
+// Fetch usernames from the backend
+useEffect(() => {
+    const fetchUsernames = async () => {
+        try {
+            const response = await axios.get('http://localhost:8090/get-usernames');
+            setUsernames(response.data.usernames);
+        } catch (error) {
+            console.error('Error fetching usernames:', error);
+        }
+    };
+
+    fetchUsernames();
+}, []); // The empty array ensures this only runs once when the component loads.
+
+// confirmation dialog operations
+const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+const openConfirmationPopup = () => setIsConfirmationOpen(true);
+const closeConfirmationPopup = () => setIsConfirmationOpen(false);
+
 
     // transaction date and amount
     const [transactionDate, setTransactionDate] = useState('');
@@ -260,16 +277,37 @@ const ProductPage = () => {
     };
 
     // final confirmation popup, do something with the transaction date and amount 
-    const handleConfirmationPopupSubmit = (date, amount) => {
-        // convert date back to epoch time
-        let transactionDate = new Date(date).getTime() / 1000;
+    const handleConfirmationPopupSubmit = async (date, amount) => {
+        let isoTime = new Date(date).toISOString();
         let transactionAmount = amount;
-
-        console.log(`THIS IS FINAL\nSubmitted Date: ${transactionDate}, Submitted Amount: ${transactionAmount}`);
-        alert(`Submitted Date: ${transactionDate}, Submitted Amount: ${transactionAmount}`);
-
-        //TODO: do something with the transaction date and amount
+        const username = localStorage.getItem('username'); // Retrieve username
+    
+        if (!username) {
+            alert("Username is required to submit transactions.");
+            return;
+        }
+    
+        console.log(`Submitting Date: ${isoTime}, Submitted Amount: ${transactionAmount}`);
+    
+        try {
+            const response = await axios.post('http://localhost:8090/add-receipt', {
+                username,
+                transactionDate: isoTime,
+                transactionAmount,
+            });
+    
+            if (response.status === 200) {
+                alert("Transaction added successfully!");
+            } else {
+                alert("Failed to add transaction.");
+            }
+        } catch (error) {
+            console.error('Error adding transaction:', error);
+            alert("Error adding transaction.");
+        }
     };
+
+    
 
     // confirmation popup
     const ConfirmationPopup = ({ isOpen, onClose, onSubmit }) => {
@@ -278,13 +316,11 @@ const ProductPage = () => {
         const handleSubmit = async () => {
             const date = document.getElementById('transactionDate').value;
             const amount = document.getElementById('transactionAmount').value;
-
-            // handle submit callback 
-            if (onSubmit) {
-                onSubmit(date, amount);
-            }
-
-            // close the dialog 
+        
+            // Submit the transaction data to the backend
+            await handleConfirmationPopupSubmit(date, amount);
+        
+            // Close the dialog
             onClose();
         };
 
@@ -301,6 +337,7 @@ const ProductPage = () => {
                             type="datetime-local"
                             id="transactionDate"
                             value={transactionDate}
+                            onChange={(e) => setTransactionDate(e.target.value)} // Add onChange handler
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                     </div>
@@ -313,6 +350,7 @@ const ProductPage = () => {
                             step="0.01"
                             id="transactionAmount"
                             value={transactionAmount}
+                            onChange={(e) => setTransactionAmount(e.target.value)} // Add onChange handler
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                     </div>

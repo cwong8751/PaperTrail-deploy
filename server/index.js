@@ -66,6 +66,43 @@ async function connectToMongoAndStartServer() {
 
 connectToMongoAndStartServer();
 
+//Add transactions from receipts
+// Add a transaction for the logged-in user
+app.post('/add-receipt', async (req, res) => {
+  console.log(req.body); // Log incoming request body
+  const { username, transactionDate, transactionAmount } = req.body;
+
+  // Ensure the required fields are provided
+  if (!username || !transactionDate || !transactionAmount) {
+    return res.status(400).json({ error: 'Username, transaction date, and transaction amount are required.' });
+  }
+
+  try {
+    // Find the user by username
+    const user = await usersCollection.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    // Create a new transaction object
+    const newTransaction = {
+      transactionDate: new Date(transactionDate), // Ensure it's a valid date
+      transactionAmount: parseFloat(transactionAmount) // Ensure it's a valid float
+  };
+
+    // Push the transaction into the user's transactions array
+    await usersCollection.updateOne({ username }, { $push: { transactions: newTransaction } });
+
+    res.status(200).json({ message: 'Transaction added successfully.' });
+  } catch (error) {
+    console.error('Error adding transaction:', error);
+    res.status(500).json({ error: 'Server error while adding transaction.' });
+  }
+});
+
+
+
 //Register a new user
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
@@ -127,28 +164,42 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// app.post('/getallreceipts', async (req, res) => {
-//   const { username } = req.body;
+app.post('/getallreceipts', async (req, res) => {
+  const { username } = req.body;
 
-//   // Debugging: Log the incoming data
-//   console.log("Getting all receipts for user with username:", username);
+  // Debugging: Log the incoming data
+  console.log("Getting all receipts for user with username:", username);
 
-//   if (!username) {
-//     return res.status(400).json({ error: 'Username is required' });
-//   }
+  if (!username) {
+    return res.status(400).json({ error: 'Username is required' });
+  }
 
-//   try {
-//     const user = await usersCollection.findOne({ username });
-//     if (!user) {
-//       return res.status(400).json({ error: 'Username does not exist' });
-//     }
+  try {
+    const user = await usersCollection.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ error: 'Username does not exist' });
+    }
 
-//     res.json({ receipts: user.receipts });
-//   } catch (error) {
-//     console.error('Get all receipts error:', error);
-//     res.status(500).json({ error: 'Server error during get all receipts' });
-//   }
-// }
+    res.json({ receipts: user.receipts });
+  } catch (error) {
+    console.error('Get all receipts error:', error);
+    res.status(500).json({ error: 'Server error during get all receipts' });
+  }
+});
+
+// Fetch all usernames
+app.get('/get-usernames', async (req, res) => {
+  console.log("Received request for /get-usernames");
+  try {
+    const users = await usersCollection.find({}, { projection: { username: 1, _id: 0 } }).toArray();
+    console.log(users); // Log the fetched users
+    const usernames = users.map(user => user.username);
+    res.status(200).json({ usernames });
+  } catch (error) {
+    console.error('Error fetching usernames:', error);
+    res.status(500).json({ error: 'Server error while fetching usernames.' });
+  }
+});
 
 // Protected route example (requires valid JWT)
 app.get('/protected', async (req, res) => {
@@ -171,4 +222,4 @@ app.post('/add-customer', AddCustomer);
 app.post('/generate-link', GenerateLink);
 app.post('/get-transactions', GetTransactions);
 app.post('/refresh-accounts', RefreshAccounts);
-app.post('/get-accounts', GetAccounts)
+app.post('/get-accounts', GetAccounts);
