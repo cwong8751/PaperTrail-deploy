@@ -23,7 +23,7 @@ const FinanceManager = () => {
 
             <div className="container mx-auto p-4 pt-24">
                 <h1 className="text-2xl font-semibold text-gray-800">Finance Manager</h1>
-
+                    
                 <Histogram data={dummyData} />
 
                 <h2 className="text-xl font-semibold text-gray-700 mt-6">Your Receipts</h2>
