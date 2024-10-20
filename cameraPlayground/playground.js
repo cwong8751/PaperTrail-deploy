@@ -79,6 +79,22 @@ async function testRequest(input, prompt) {
         ]
     }
 
+    // check stupid
+    if (input === "") {
+        alert("I need image");
+        return;
+    }
+
+    if(apiKey === "") {
+        alert("I need API key");
+        return;
+    }
+
+    if(prompt === "") {
+        alert("I need prompt");
+        return;
+    }
+
     // request general 
     const response = await fetch(url, {
         method: 'POST',
@@ -89,15 +105,12 @@ async function testRequest(input, prompt) {
         body: JSON.stringify(imgData) // change to imgData for image input
     });
 
-
     if (!response.ok) {
         throw new Error('Error: ' + response.statusText);
     }
 
     const result = await response.json();
     const message = result.choices[0].message.content;
-
-    //console.log('ChatGPT Response:', message);
 
     document.getElementById('api-response').innerHTML = message;
     let oresult = document.getElementById('response-list').innerHTML;
