@@ -41,6 +41,8 @@ const FinanceManager = () => {
                 <h1 className="text-2xl font-semibold text-gray-800">Finance Manager</h1>
 
                 {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+                    
+                <Histogram data={dummyData} />
 
                 <h2 className="text-xl font-semibold text-gray-700 mt-6">Your Receipts</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
