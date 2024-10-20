@@ -9,6 +9,20 @@ const ProductPage = () => {
     const [imagePreview, setImagePreview] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
 
+    // confirmation dialog operations
+    const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+    const openConfirmationPopup = () => setIsConfirmationOpen(true);
+    const closeConfirmationPopup = () => setIsConfirmationOpen(false);
+
+    // transaction date and amount
+    const [transactionDate, setTransactionDate] = useState('');
+    const [transactionAmount, setTransactionAmount] = useState(0);
+
+    // no receipt found popup operations
+    const [isOpen, setIsOpen] = useState(false);
+    const openPopup = () => setIsOpen(true);
+    const closePopup = () => setIsOpen(false);
+
     // Start webcam stream
     useEffect(() => {
         const videoElement = document.getElementById('video');
@@ -23,15 +37,8 @@ const ProductPage = () => {
         }
     }, []);
 
-    // Capture image from video stream
-    const captureImage = async () => {
-        const videoElement = document.getElementById('video');
-        const canvasElement = document.getElementById('canvas');
-        const context = canvasElement.getContext('2d');
-        context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-        const imageData = canvasElement.toDataURL('image/png');
-        setImagePreview(imageData);  // You can display this as an image or send it to a server
-
+    // chat request code
+    const makeRequest = async (input) => {
         const apiKey = "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";
         const url = "https://api.openai.com/v1/chat/completions";
 
@@ -44,12 +51,12 @@ const ProductPage = () => {
                     content: [
                         {
                             type: "text",
-                            text: "Extract all information in receipt, if there is no receipt in the image, please let me know.",
+                            text: "look at the image, and return a json string with the following information: result, transaction_time and transaction_amount. If no receipt is found or you cannot analyze the image, result should have the value of fail. if receipt is found, result should have the value ok, transaction_date should be in epoch time, transaction_amount should be transaction amount with digits only, no dollar signs, and in a float format, not string. Only return a json string in all cases, and nothing else.",
                         },
                         {
                             type: "image_url",
                             image_url: {
-                                url: imageData
+                                url: input
                             }
                         }
                     ]
@@ -67,7 +74,6 @@ const ProductPage = () => {
             body: JSON.stringify(imgData) // change to imgData for image input
         });
 
-
         if (!response.ok) {
             throw new Error('Error: ' + response.statusText);
         }
@@ -75,9 +81,53 @@ const ProductPage = () => {
         const result = await response.json();
         const message = result.choices[0].message.content;
 
+        return message;
+    };
 
-        // whatever to do with the message 
-        alert(message);
+    // Capture image from video stream
+    const captureImage = async () => {
+        const videoElement = document.getElementById('video');
+        const canvasElement = document.getElementById('canvas');
+        const context = canvasElement.getContext('2d');
+        context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+        const imageData = canvasElement.toDataURL('image/png');
+        //setImagePreview(imageData);  // You can display this as an image or send it to a server
+
+        var message = await makeRequest(imageData);
+
+        // message format
+        //console.log(message);
+
+        // parse message 
+        var parsedMessage = message.replace(/```json/g, '').replace(/```/g, '');
+        console.log(parsedMessage);
+
+        parsedMessage = JSON.parse(parsedMessage);
+        if (parsedMessage.result === 'ok') {
+            const transactionDate = parsedMessage.transaction_time;
+            const transactionAmount = parsedMessage.transaction_amount;
+
+
+            // cleanse transactiondate and transaction amount
+            let tDate = new Date(transactionDate * 1000).toISOString().slice(0, 16)
+            let tAmount = parseFloat(transactionAmount);
+
+            //let tAmount = parseFloat(transactionAmount.replace(/[$,]/g, ''));
+
+            // set state variables
+            setTransactionDate(tDate);
+            setTransactionAmount(tAmount);
+
+            // popup confirmation dialog 
+            openConfirmationPopup();
+
+            //TODO: do whatever to the transaction date and amount
+            console.log(`Transaction Date: ${transactionDate}, Transaction Amount: ${transactionAmount}`);
+        } else {
+            openPopup(); // open error popup 
+            console.log('No valid receipt found.');
+        }
+
     };
 
     // Handle sending a message
@@ -126,46 +176,144 @@ const ProductPage = () => {
         try {
             // Convert uploaded image to base64 string
             const base64Image = await toBase64(uploadedImage);
-    
-            // Prepare API request data with image
-            const apiKey = "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";
-            const url = "https://api.openai.com/v1/chat/completions";
-    
-            const imgData = {
-                model: 'gpt-4o-mini',
-                messages: [
-                    {
-                        role: 'user',
-                        content: [
-                            {
-                                type: "text",
-                                text: "Extract all information in receipt, if there is no receipt in the image, please let me know."
-                            },
-                            {
-                                type: "image_url",
-                                image_url: {
-                                    url: base64Image
-                                }
-                            }
-                        ]
-                    },
-                ]
-            };
-    
-            // Send API request
-            const response = await axios.post(url, imgData, {
-                headers: {
-                    'Authorization': `Bearer ${apiKey}`,
-                    'Content-Type': 'application/json',
-                }
-            });
-    
-            const message = response.data.choices[0].message.content;
-            alert(message);
+
+            // make request to chat gpt 
+            var message = await makeRequest(base64Image);
+
+            var parsedMessage = message.replace(/```json/g, '').replace(/```/g, '');
+            console.log(parsedMessage);
+
+            parsedMessage = JSON.parse(parsedMessage);
+            if (parsedMessage.result === 'ok') {
+                const transactionDate = parsedMessage.transaction_time;
+                const transactionAmount = parsedMessage.transaction_amount;
+
+                console.log(`Transaction Date: ${transactionDate}, Transaction Amount: ${transactionAmount}`);
+
+
+                // cleanse transactiondate and transaction amount
+                let tDate = new Date(transactionDate * 1000).toISOString().slice(0, 16)
+                let tAmount = parseFloat(transactionAmount);
+
+                // PROBLEM WITH tAmount
+                // Some times chat gpt returns transaction_amount as a string with $ sign in front
+                // Some times it is a number depending on the image inputted. Prompt has been changed, 
+                // hence the line below is commented out.
+                // let tAmount = parseFloat(transactionAmount.replace(/[$,]/g, ''));
+
+                // set state variables
+                setTransactionDate(tDate);
+                setTransactionAmount(tAmount);
+
+                // popup confirmation dialog 
+                openConfirmationPopup();
+            } else {
+                openPopup(); // open error popup 
+                console.log('No valid receipt found.');
+            }
         } catch (error) {
             setErrorMessage('Failed to upload image, please try again.');
             console.error('Error uploading image:', error);
         }
+    };
+
+
+    // error popup 
+    const ErrorPopup = ({ isOpen, onClose }) => {
+        if (!isOpen) return null;
+
+        return (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div className="bg-white rounded-lg shadow-lg p-6 w-1/3">
+                    <h2 className="text-lg font-semibold mb-4">Error</h2>
+                    <p className="mb-4">We did not find any receipts in the image</p>
+                    <div className="flex justify-end">
+                        <button
+                            className="px-4 py-2 bg-red-500 text-white rounded"
+                            onClick={onClose}
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+
+    // final confirmation popup, do something with the transaction date and amount 
+    const handleConfirmationPopupSubmit = (date, amount) => {
+        // convert date back to epoch time
+        let epochTime = new Date(date).getTime() / 1000;
+        let transactionAmount = amount;
+
+        console.log(`THIS IS FINAL\nSubmitted Date: ${epochTime}, Submitted Amount: ${transactionAmount}`);
+        alert(`Submitted Date: ${epochTime}, Submitted Amount: ${transactionAmount}`);
+
+        //TODO: do something with the transaction date and amount
+    };
+
+    // confirmation popup
+    const ConfirmationPopup = ({ isOpen, onClose, onSubmit }) => {
+        if (!isOpen) return null;
+
+        const handleSubmit = async () => {
+            const date = document.getElementById('transactionDate').value;
+            const amount = document.getElementById('transactionAmount').value;
+
+            // handle submit callback 
+            if (onSubmit) {
+                onSubmit(date, amount);
+            }
+
+            // close the dialog 
+            onClose();
+        };
+
+        return (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div className="bg-white rounded-lg shadow-lg p-6 w-1/3">
+                    <h2 className="text-lg font-semibold mb-4">Transaction Confirmation</h2>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="transactionDate">
+                            Transaction Date
+                        </label>
+                        <input
+                            type="datetime-local"
+                            id="transactionDate"
+                            value={transactionDate}
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="transactionAmount">
+                            Transaction Amount
+                        </label>
+                        <input
+                            type="number"
+                            step="0.01"
+                            id="transactionAmount"
+                            value={transactionAmount}
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        />
+                    </div>
+                    <div className="flex justify-end space-x-4">
+                        <button
+                            className="px-4 py-2 bg-red-500 text-white rounded"
+                            onClick={onClose}
+                        >
+                            Close
+                        </button>
+                        <button
+                            className="px-4 py-2 bg-blue-500 text-white rounded"
+                            onClick={handleSubmit}
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
     };
 
     return (
@@ -218,6 +366,8 @@ const ProductPage = () => {
                     </div>
                 </div>
             </div>
+            <ErrorPopup isOpen={isOpen} onClose={closePopup} />
+            <ConfirmationPopup isOpen={isConfirmationOpen} onClose={closeConfirmationPopup} onSubmit={handleConfirmationPopupSubmit} />
         </div>
     );
 };
