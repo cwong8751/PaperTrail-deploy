@@ -1,11 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'; // Updated imports
 import Login from './components/Login';
+import axios from 'axios';
 import Register from './components/Register';
 import Homepage from './components/Homepage';
 import LearnMore from './components/LearnMore';
 import ReadyToGo from './components/ReadyToGo';
 import ProductPage from './components/Product';
+import GetAccessToken from './finance/GetAccessToken';
 function App() {
 
   return (
@@ -18,6 +20,7 @@ function App() {
           <Route path="/learn-more" element={<LearnMore/>} />
           <Route path="/ready" element={<ReadyToGo />} />
           <Route path="/product" element={<ProductPage />} />
+          <Route path="/test" element={<GetAccessToken />} />
           <Route path="/" element={<Homepage />} />
           {/* <Route path="*" element={<Navigate to="/register" />} /> Catch-all route */}
         </Routes>
