@@ -16,7 +16,7 @@ const LearnMore = () => {
                     Digital receipts provide a seamless, eco-friendly way to track and manage your purchases. Embrace the future of paperless transactions today.
                 </p>
                 <Link
-                    to="/signup"
+                    to="/product"
                     className="mt-6 inline-block bg-green-500 text-white rounded-full px-8 py-4 text-lg font-semibold hover:bg-green-600 transition-all"
                 >
                     Get Started Now
