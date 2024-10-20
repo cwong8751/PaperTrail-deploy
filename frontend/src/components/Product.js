@@ -60,7 +60,7 @@ const closeConfirmationPopup = () => setIsConfirmationOpen(false);
     const makeRequest = async (input) => {
         setLoading(true);
 
-        const apiKey = "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";
+        const apiKey = "";//new key
         const url = "https://api.openai.com/v1/chat/completions";
 
         // request for image input

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Histogram from './Histogram';
+import dummyData from './dummyData.json';
 
 const FinanceManager = () => {
     const [receipts, setReceipts] = useState([]);
