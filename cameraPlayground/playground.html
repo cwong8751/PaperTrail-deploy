@@ -4,13 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Camera Input</title>
+    <style>
+        * {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .text-inputs {
+            display: flex;
+            flex-direction: column;
+            width: 40%;
+        }
+
+        .video-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 60%;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button {
+            font-size: 20px;
+        }
+
+        #api-key {
+            font-size: 10px;
+        }
+
+        #api-response {
+            font-style: italic;
+            font-size: 12px;
+            background-color: aliceblue;
+        }
+
+        #response-list {
+            background-color: antiquewhite;
+        }
+    </style>
 </head>
 <body>
-    <h1>Camera Capture</h1>
-    <video id="video" width="640" height="480" autoplay></video>
-    <button type="button" id="capture">Capture</button>
-    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
-    <p id="api-response"></p>
+    <h1>Prompt engineer</h1>
+    <div class="container">
+        <div class="text-inputs">
+            <i>Telemetry</i>
+            <p id="api-key">Your API key is: </p>
+            <input type="text" id="prompt" placeholder="Extract all information in receipt, if there is no receipt in the image, please let me know.">
+            <br><br>
+            <p id="api-response">There is no data from OpenAI</p>
+            <p>---Responses---</p>
+            <p id="response-list"></p>
+        </div>
+        <div class="video-container">
+            <video id="video" width="640" height="480" autoplay></video>
+            <Br>
+            <button type="button" id="capture">Capture foto</button>
+            <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+        </div>
+    </div>
     <script src="playground.js"></script>
 </body>
 </html>
