@@ -36,9 +36,9 @@ const Homepage = () => {
 
       {/* Hero Section */}
       <section className="flex flex-col justify-center items-center text-center bg-gradient-to-r from-blue-400 via-purple-500 to-blue-400 text-white h-screen">
-        <h1 className="text-5xl font-bold mb-4">Welcome to Our Platform</h1>
+        <h1 className="text-5xl font-bold mb-4">Welcome to PaperTrail</h1>
         <p className="text-lg mb-8 max-w-xl">
-          Discover the power of connecting with people and managing your financial plans effortlessly. Join us to get access to features that will help you grow and achieve your goals.
+          Discover the power of precise budgeting using AI powered tools to manage your finances effortlessly. Join us to get access to features that will help you grow and achieve your monetary goals.
         </p>
         <div className="space-x-4">
           <Link
