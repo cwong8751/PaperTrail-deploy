@@ -26,7 +26,7 @@ captureButton.addEventListener('click', () => {
   var prompt = document.getElementById('prompt').value;
 
   if (prompt === "") {
-      prompt = "Extract all information in receipt, if there is no receipt in the image, please let me know.";
+      prompt = "look at the image, and return a json string with the following information: result, transaction_time and transaction_amount. If no receipt is found or you cannot analyze the image, result should have the value of fail. if receipt is found, result should have the value ok, transaction_date should be in epoch time, transaction_amount should be transaction amount with digits only, no dollar signs, and in a float format, not string. Only return a json string in all cases, and nothing else.";
   }
 
   testRequest(imageData, prompt); // send image data to API, image already in base64 format
