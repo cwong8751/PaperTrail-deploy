@@ -101,5 +101,5 @@ async function testRequest(input, prompt) {
 
     document.getElementById('api-response').innerHTML = message;
     let oresult = document.getElementById('response-list').innerHTML;
-    document.getElementById('response-list').innerHTML = oresult + "<li>" + message + "</li>";
+    document.getElementById('response-list').innerHTML = oresult + "<li>" + "<b>" + prompt + "</b>" + message + "</li>";
 }
