@@ -1,13 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import Histogram from './Histogram';
-import dummyData from './dummyData.json'
+
 const FinanceManager = () => {
+    const [receipts, setReceipts] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    // onload 
+    // Fetch receipts data for the logged-in user
     useEffect(() => {
+        const fetchReceipts = async () => {
+            const username = localStorage.getItem('username'); // Assuming username is stored in localStorage after login
+            if (!username) {
+                setErrorMessage('Please log in to view your receipts.');
+                return;
+            }
 
+            try {
+                const response = await axios.post('http://localhost:8090/getallreceipts', { username });
+                setReceipts(response.data.receipts || []); // Set receipts data or an empty array
+            } catch (error) {
+                console.error('Error fetching receipts:', error);
+                setErrorMessage('Failed to fetch receipts. Please try again later.');
+            }
+        };
+        fetchReceipts();
     }, []);
 
     return (
@@ -24,23 +40,28 @@ const FinanceManager = () => {
             <div className="container mx-auto p-4 pt-24">
                 <h1 className="text-2xl font-semibold text-gray-800">Finance Manager</h1>
 
-                <Histogram data={dummyData} />
+                {errorMessage && <p className="text-red-500">{errorMessage}</p>}
 
                 <h2 className="text-xl font-semibold text-gray-700 mt-6">Your Receipts</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                    <ReceiptNoteCard transactionDate="2021-08-01" transactionAmount={100.00} />
-                    <ReceiptNoteCard transactionDate="2021-08-02" transactionAmount={200.00} />
-                    <ReceiptNoteCard transactionDate="2021-08-03" transactionAmount={300.00} />
-                    <ReceiptNoteCard transactionDate="2021-08-04" transactionAmount={400.00} />
-                    <ReceiptNoteCard transactionDate="2021-08-05" transactionAmount={500.00} />
-                    <ReceiptNoteCard transactionDate="2021-08-06" transactionAmount={600.00} />
+                    {receipts.length > 0 ? (
+                        receipts.map((receipt, index) => (
+                            <ReceiptNoteCard
+                                key={index}
+                                transactionDate={new Date(receipt.transactionDate).toLocaleDateString()} // Format the date
+                                transactionAmount={receipt.transactionAmount}
+                            />
+                        ))
+                    ) : (
+                        <p>No receipts found.</p>
+                    )}
                 </div>
             </div>
         </div>
     );
 };
 
-// note card component 
+// Note card component to display each receipt
 const ReceiptNoteCard = ({ transactionDate, transactionAmount }) => {
     return (
         <div className="w-full h-full bg-white shadow-lg rounded-lg overflow-hidden p-6">
@@ -50,6 +71,6 @@ const ReceiptNoteCard = ({ transactionDate, transactionAmount }) => {
             </div>
         </div>
     );
-}
+};
 
 export default FinanceManager;

@@ -15,18 +15,20 @@ const Login = () => {
     setSuccessMessage('');
 
     try {
-      const response = await axios.post('http://localhost:8090/login', {
-        username,
-        password,
-      });
+      const response = await axios.post('http://localhost:8090/login', { username, password });
 
-      if (response.data.token) {
+      // Check if the response contains token and username
+      if (response.data.token && response.data.username) {
+        // Store the token and username in localStorage
         localStorage.setItem('authToken', response.data.token);
-        localStorage.setItem('username', username);
+        localStorage.setItem('username', response.data.username);
+
+        // Display success message and navigate to home page
         setSuccessMessage('Login successful!');
         alert("Login successfully");
-
         navigate('/');
+      } else {
+        setErrorMessage('Login failed. Please try again.');
       }
     } catch (error) {
       if (error.response && error.response.data) {

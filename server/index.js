@@ -132,9 +132,8 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
-  // Debugging: Log the incoming data
-  console.log("Logging in user with username:", username, "and password:", password);
-
+  console.log("Logging in user with username:", username);  // Debug log
+  
   if (!username || !password) {
     return res.status(400).json({ error: 'Username and password are required' });
   }
@@ -157,7 +156,9 @@ app.post('/login', async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    res.json({ token, message: 'Login successful' });
+    // Save the username and token in the response
+    res.json({ token, username: user.username, message: 'Login successful' });
+    
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Server error during login' });
@@ -180,7 +181,8 @@ app.post('/getallreceipts', async (req, res) => {
       return res.status(400).json({ error: 'Username does not exist' });
     }
 
-    res.json({ receipts: user.receipts });
+    // Return the transactions field (or whichever field holds the receipts)
+    res.json({ receipts: user.transactions || [] });
   } catch (error) {
     console.error('Get all receipts error:', error);
     res.status(500).json({ error: 'Server error during get all receipts' });
@@ -189,31 +191,13 @@ app.post('/getallreceipts', async (req, res) => {
 
 // Fetch all usernames
 app.get('/get-usernames', async (req, res) => {
-  console.log("Received request for /get-usernames");
   try {
     const users = await usersCollection.find({}, { projection: { username: 1, _id: 0 } }).toArray();
-    console.log(users); // Log the fetched users
     const usernames = users.map(user => user.username);
     res.status(200).json({ usernames });
   } catch (error) {
     console.error('Error fetching usernames:', error);
     res.status(500).json({ error: 'Server error while fetching usernames.' });
-  }
-});
-
-// Protected route example (requires valid JWT)
-app.get('/protected', async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
-
-  if (!token) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    res.json({ message: 'Protected data accessed', user: decoded });
-  } catch (error) {
-    res.status(401).json({ error: 'Invalid token' });
   }
 });
 

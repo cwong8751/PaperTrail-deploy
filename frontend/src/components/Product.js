@@ -14,16 +14,15 @@ const ProductPage = () => {
 // Fetch usernames from the backend
 useEffect(() => {
     const fetchUsernames = async () => {
-        try {
-            const response = await axios.get('http://localhost:8090/get-usernames');
-            setUsernames(response.data.usernames);
-        } catch (error) {
-            console.error('Error fetching usernames:', error);
-        }
+      try {
+        const response = await axios.get('http://localhost:8090/get-usernames');
+        setUsernames(response.data.usernames);
+      } catch (error) {
+        console.error('Error fetching usernames:', error);
+      }
     };
-
     fetchUsernames();
-}, []); // The empty array ensures this only runs once when the component loads.
+  }, []);
 
 // confirmation dialog operations
 const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
