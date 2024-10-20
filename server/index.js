@@ -1,4 +1,5 @@
 import express from 'express';
+import helmet from 'helmet'; //security
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { MongoClient, ServerApiVersion } from 'mongodb';
@@ -15,6 +16,17 @@ const app = express();
 app.use(express.json()); // To parse JSON request bodies
 app.use(cors());
 app.use(bodyParser.json())
+
+// Set up helmet with custom CSP
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"], // Allow content from self
+      scriptSrc: ["'self'", "https://vercel.live"], // Allow scripts from self and Vercel
+      // Add other directives as needed, e.g. imgSrc, styleSrc, etc.
+    },
+  },
+}));
 
 const uri = process.env.MONGO_URI;
 const JWT_SECRET = process.env.JWT_SECRET;
